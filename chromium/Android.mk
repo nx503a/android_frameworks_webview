@@ -19,6 +19,28 @@
 
 LOCAL_PATH := $(call my-dir)
 
+# Google Webview
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := webview
+LOCAL_SRC_FILES := prebuilt/webview.apk
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_PACKAGE_SUFFIX)
+LOCAL_MODULE_CLASS := APPS
+LOCAL_CERTIFICATE := PRESIGNED
+TARGET_ARCH_ABI := armeabi-v7a
+TARGET_LIB_DIR := lib
+TARGET_LIB_ARM_DIR := arm
+
+$(shell mkdir -p $(TARGET_OUT_SHARED_LIBRARIES))
+$(shell cp $(LOCAL_PATH)/prebuilt/$(TARGET_ARCH_ABI)/libwebviewchromium.so $(TARGET_OUT_SHARED_LIBRARIES))
+
+$(shell mkdir -p $(TARGET_OUT_APPS)/webview/lib/$(TARGET_LIB_ARM_DIR))
+$(shell ln -sf ../../../../$(TARGET_LIB_DIR)/libwebviewchromium.so $(TARGET_OUT_APPS)/webview/lib/$(TARGET_LIB_ARM_DIR)/libwebviewchromium.so)
+ALL_DEFAULT_INSTALLED_MODULES += $(TARGET_OUT_APPS)/webview/lib/$(TARGET_LIB_ARM_DIR)/libwebviewchromium.so
+
+include $(BUILD_PREBUILT)
+
 # Native support library (libwebviewchromium_plat_support.so) - does NOT link
 # any native chromium code.
 include $(CLEAR_VARS)
